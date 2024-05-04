@@ -7,7 +7,15 @@ class Command(BaseCommand):
     help = "Closes the specified poll for voting"
 
     def add_arguments(self, parser):
-        parser.add_argument("poll_ids", nargs="" + "", type=int)
+        # Positional arguments
+        parser.add_argument("poll_ids", nargs="+", type=int)
+
+        # Named (optional) arguments
+        parser.add_argument(
+            "--delete",
+            action="store_true",
+            help="Delete poll instead of closing it",
+        )
 
     def handle(self, *args, **options):
         for poll_id in options["poll_ids"]:
@@ -18,6 +26,9 @@ class Command(BaseCommand):
 
             poll.opened = False
             poll.save()
+
+            if options["delete"]:
+                poll.delete()
 
             self.stdout.write(
                 self.style.SUCCESS('Successfully closed poll "%s"' % poll_id)
