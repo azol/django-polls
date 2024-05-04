@@ -1,0 +1,37 @@
+services:
+  django:
+    restart: always
+    build: .
+    expose:
+      - 8000
+    volumes:
+      - db-data:/db
+      - static-data:/app/static
+    environment:
+      - DEBUG=${DEBUG:-False}
+      - SECRET_KEY
+      - STATIC_URL=${STATIC_URL:-static/}
+      - DB_NAME=${DB_NAME:-/db/db.sqlite3}
+      - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME:-admin}
+      - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL:-admin@example.com}
+      - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
+
+  nginx:
+    restart: always
+    image: nginx:alpine
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates
+      - static-data:/usr/share/nginx/html/static:ro
+    expose:
+      - 80
+    ports:
+      - 80:80
+    depends_on:
+      - django
+    environment:
+      - NGINX_SERVER_NAME=${NGINX_SERVER_NAME:-localhost}
+      - NGINX_DJANGO_HOST=django
+
+volumes:
+  db-data:
+  static-data:
