@@ -4,5 +4,4 @@ db.sqlite3
 /static/
 .env
 
-/nginx/domain.crt
-/nginx/domain.key
+/.vercel/
