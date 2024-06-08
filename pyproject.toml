@@ -33,4 +33,5 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/azol/django-polls"
+Homepage = "https://github.com/azol/django-polls/tree/package"
+Repository = "https://github.com/azol/django-polls/tree/package"
